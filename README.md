@@ -1,5 +1,5 @@
 # Xournalpp-Notebook-Plugin
-This is a simple implementation of notebooks in Xournal++, similar to onenote, as a plugin. It uses folders in a certain root directory to represent a notebook that contains files. There are also UI-Buttons for switching between notebooks or files. This repository consists mainly of one lua script that can also be adapted to the users needs. This plugin is only tested on windows so far and may not work yet on linux or other platforms.
+This is a simple implementation of notebooks in Xournal++, similar to onenote, as a plugin. It uses folders in a certain root directory to represent notebooks that contain files. There are also UI-Buttons for switching between notebooks or files. This repository consists mainly of one lua script that can also be adapted to the users needs. This plugin is only tested on windows so far and may not work yet on linux or other platforms.
 
 ## Installation
 Download the folder containing the .lua and .ini file and copy it into the plugins folder (depends on platform, see also https://xournalpp.github.io/guide/file-locations/) of Xournal++.
