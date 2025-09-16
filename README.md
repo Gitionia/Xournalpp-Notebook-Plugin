@@ -4,7 +4,7 @@ This is a simple implementation of notebooks in Xournal++, similar to onenote, a
 
 ## Installation
 Download the folder containing the .lua and .ini file and copy it into the plugin folder (depends on platform, see also https://xournalpp.github.io/guide/file-locations/) of Xournal++.
-Then open the .lua file and set a root directory where the notebooks should be stored.
+Then open the .lua file and set a root directory where the notebooks should be stored. The plugin also needs to be enabled in the plugins manager of Xournal++.
 
 ## Usage
 You can add 5 custom UI-Buttons that you can add by customizing the toolbar. Four of them allow for switching to the next or previous notebook or file and the one allows to select any notebook and then choose a file. Alternatively, you can use the same functionality under plugins in the taskbar.
