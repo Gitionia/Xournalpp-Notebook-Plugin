@@ -9,6 +9,8 @@ Then open the .lua file and set a root directory where the notebooks should be s
 ## Usage
 You can add 5 custom UI-Buttons that you can add by customizing the toolbar. Four of them allow for switching to the next or previous notebook or file and the one allows to select any notebook and then choose a file. Alternativly, you can use the same functionality under plugins in the taskbar.
 
+
+
 Selecting the notebook:
 <img width="2160" height="1278" alt="grafik" src="https://github.com/user-attachments/assets/705d3064-1edb-432e-907b-d534f499ff0a" />
 Selecting a file inside a notebook:
