@@ -189,51 +189,40 @@ function getRootDir()
 end
 
 function getNotebooksAndFindIndex(notebookToFind)
-	local cmd
-	if platform == "linux" then
-		cmd = 'ls "' .. getRootDir() .. '"'
-	else
-		cmd = 'dir /b "' .. getRootDir() .. '"'
-	end
-	local p = io.popen(cmd)
-
-	local notebookList = {}
-	local index = -2
-
-	local i = 1
-	for notebook in p:lines() do
-		notebookList[#notebookList + 1] = notebook
-		if notebook == notebookToFind then
-			index = i
-		end
-		i = i + 1
-	end
-
-	return notebookList, index
+	return getDirAndFindIndex(notebookToFind, getRootDir())
 end
 
 function getFilesInNotebookAndFindIndex(fileToFind, directory)
+	return getDirAndFindIndex(fileToFind, directory)
+end
+
+function getDirAndFindIndex(elementToFind, filepath)
 	local cmd
 	if platform == "linux" then
-		cmd = 'ls -p "' .. directory .. '"'
+		cmd = 'ls "' .. filepath .. '"'
 	else
-		cmd = 'dir /b "' .. directory .. '"'
+		cmd = 'dir /b "' .. filepath .. '"'
 	end
 	local p = io.popen(cmd)
 
-	local fileList = {}
+	local list = {}
 	local index = -2
 
+	if p == nil then
+		showMessage("Error: Could not read directory. \nTried to run command: " .. cmd)
+		return list, index
+	end
+
 	local i = 1
-	for file in p:lines() do
-		fileList[#fileList + 1] = file
-		if file == fileToFind then
+	for fileOrDir in p:lines() do
+		list[#list + 1] = fileOrDir
+		if fileOrDir == elementToFind then
 			index = i
 		end
 		i = i + 1
 	end
 
-	return fileList, index
+	return list, index
 end
 
 function getCurrentFileFolder()
