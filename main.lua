@@ -1,5 +1,5 @@
 --- Configure plugin:
-notebookRootDir = ""  -- the root directory for the notebooks
+notebookRootDir = "" -- the root directory for the notebooks
 platform = "linux" -- set platform: "linux" or "windows"
 version_above_1_3 = false -- default is false, set to true if warning appears when using plugin
 --------------------------------------------
@@ -39,17 +39,18 @@ function initUi()
 		["callback"] = "selectFile",
 		["accelerator"] = "<Alt><Shift>k",
 		["toolbarId"] = "SelectFile",
-		["iconName"] = "user-bookmarks",
+		["iconName"] = "user-bookmarks", -- also possible "file-manager"
 	})
 end
 
---- Do not change after this!
+--- Do not change after this
 if platform == "linux" then
 	sep = "/"
 else
 	sep = "\\"
 end
 
+-- choosing between deprecated app.msgbox and newer api with app.openDialog
 local openDialog
 if version_above_1_3 then
 	function openDialog(message, options, callback, isError)
@@ -75,7 +76,7 @@ function selectFile()
 	notebooks = getNotebooksAndFindIndex()
 
 	if #notebooks == 0 then
-		showMessage("There are no notebooks")
+		showMessage("There are currently no notebooks")
 	else
 		openDialog("Select notebook", notebooks, "openNotebookAndChooseFile", false)
 	end
@@ -102,9 +103,9 @@ function switchNotebook(locationStr, chooser)
 	local currentNotebook = getCurrentNotebook()
 	local notebooks, i = getNotebooksAndFindIndex(currentNotebook)
 
-	if i == -2 then
+	if i < 0 then
 		showMessage(
-			"Could not find current notebook. Not switching files. \n(Probably the currently open file is not in the notebook root path)"
+			"Could not find current notebook. Not switching files. \n(Probably the currently opened file is not in the notebook root path)"
 		)
 	elseif #notebooks == 0 then
 		showMessage("There are no notebooks")
@@ -147,9 +148,9 @@ function switchPage(chooser)
 	local currentFile = getCurrentFileName()
 	local files, i = getFilesInNotebookAndFindIndex(currentFile, getCurrentFileFolder())
 
-	if i == -2 then
+	if i < 0 then
 		showMessage(
-			"Could not find current file. Not switching files. \n(Probably the currently open file is not in the notebook root path)"
+			"Could not find current file. Not switching files. \n(Probably the currently opened file is not in the notebook root path)"
 		)
 	else
 		local newFile = files[chooser(files, i)]
@@ -236,6 +237,7 @@ function getCurrentFileFolder()
 	local index = string.find(currentFilePath, sep .. "[^" .. sep .. "]*$")
 	if index == nil then
 		index = #currentFilePath
+		print("getCurrentFileFolder: index unexpectedly = nil")
 	end
 
 	local currentFileFolder = string.sub(currentFilePath, 0, index - 1)
@@ -248,6 +250,7 @@ function getCurrentNotebook()
 
 	if index == nil then
 		index = #folderPath
+		print("getCurrentNotebook: index unexpectedly = nil")
 	end
 
 	local notebook = string.sub(folderPath, index + 1)
@@ -257,8 +260,10 @@ end
 function getCurrentFileName()
 	local currentFilePath = getCurrentFilePath()
 	local index = string.find(currentFilePath, sep .. "[^" .. sep .. "]*$")
+
 	if index == nil then
 		index = #currentFilePath
+		print("getCurrentFileName: index unexpectedly = nil")
 	end
 
 	local currentFileFolder = string.sub(currentFilePath, index + 1)
@@ -270,6 +275,7 @@ function getCurrentFilePath()
 	return doc.xoppFilename
 end
 
+-- shortens long file names into multiline names
 function getShortenedFileNames(files)
 	local shortenedFileNames = {}
 
@@ -280,7 +286,6 @@ function getShortenedFileNames(files)
 		end
 	end
 
-	local estimatedTotalWidth = #files * maxLength
 	local maxTotalWidth = 120
 	local targetWidth = math.floor(maxTotalWidth / #files)
 
@@ -293,6 +298,7 @@ end
 
 function shortenFileName(filename, targetWidth)
 	local index = string.find(filename, ".[^.]*$")
+	-- remove .xopp file extension
 	local newFileName = string.sub(filename, 1, index - 1)
 
 	if string.len(newFileName) > 3 * targetWidth then
