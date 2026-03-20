@@ -83,6 +83,8 @@ function selectFile()
 end
 
 function openNotebookAndChooseFile(selection)
+	if selection < 0 then return end
+
 	notebookDir = getRootDir() .. sep .. notebooks[selection]
 	files = getFilesInNotebookAndFindIndex("", notebookDir)
 
@@ -95,6 +97,8 @@ function openNotebookAndChooseFile(selection)
 end
 
 function openSelectedFile(selection)
+	if selection < 0 then return end
+
 	local newFilePath = notebookDir .. sep .. files[selection]
 	app.openFile(newFilePath)
 end
